@@ -111,3 +111,54 @@
 #winner-mark {
     font-size: 4rem;
 }
+
+.active-sign {
+    top: 1rem;
+    left: 1rem;
+    font-size: 4rem;
+    padding-bottom: 0.5rem;
+    height: 6rem;
+    width: 6rem;
+    color: blue;
+    background-color: rgba(165, 198, 234, 0.2)
+}
+
+.active-o {
+    left: auto;
+    right: 1rem;
+    color: green;
+}
+
+.owner {
+    position: absolute;
+    bottom: 0rem;
+    padding: 0.3rem 1rem;
+    left: calc(50% - (207px / 2))
+}
+
+.fa-copyright {
+    margin-right: 0.3rem;
+}
+
+#date {
+    margin-right: 1rem;
+    position: relative;
+}
+
+#date::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 0.5px;
+    right: -0.5rem;
+    background-color: rgba(0, 36, 74, 0.5);
+}
+
+.owner span, .owner i {
+    font-size: 1rem;
+    color: rgb(0, 36, 74);
+}
+
+.owner a:hover {
+    opacity: 1 !important;
+}

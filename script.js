@@ -1,6 +1,3 @@
-// TODO -- Disable board if there is already a winner
-// TODO -- Reset board after play-again button is clicked
-
 // * Check if one player matches to winning combination
 
 const Gameboard = (() => {
@@ -38,8 +35,10 @@ const Round = () => {
     let startContainer = document.querySelector('.start-container')
     let restartBtn = document.getElementById('restart-btn')
     let restartContainer = document.querySelector('.restart-container')
+    let activeSign = document.querySelector('.active-sign')
 
     const start = () => {
+        activeSign.textContent = 'x'
         startBtn.addEventListener('click', () => {
             startContainer.style.height = '0'
             setTimeout(() => {
@@ -61,6 +60,9 @@ const Round = () => {
             board.style.opacity = '1'
             restartContainer.style.height = '0'
 
+            activeSign.style.backgroundColor = 'rgba(165, 198, 234, 0.2)'
+            activeSign.classList.remove('active-o')
+
             player.playAgain()
 
             setTimeout(() => {
@@ -72,11 +74,14 @@ const Round = () => {
     return { start, showWinner }
 }
 
+// * 
+
 const Player = () => {
 
     let boardItem = document.querySelectorAll('.board-item')
     let result = document.getElementById('result')
     let winnerSign = document.getElementById('winner-mark')
+    let activeSign = document.querySelector('.active-sign')
 
     let board = new Array(9).fill(null)
     let currentSign = ''
@@ -101,6 +106,28 @@ const Player = () => {
         }
     }
 
+    const _getWinnerDetails = () => {
+        result.textContent = `${currentSign === 'x' ? 'Player 1' : 'Player 2'} wins!`
+        winnerSign.textContent = `${currentSign === 'x' ? 'x' : 'o'}`
+        winnerSign.style.color = `${currentSign === 'x' ? 'blue' : 'green'}`
+    }
+
+    const _getActiveSign = () => {
+        let active = `${currentSign === 'x' ? 'o' : 'x'}`
+        activeSign.textContent = active
+
+        if (active === 'o') {
+            activeSign.classList.add('active-o')
+        } else {
+            activeSign.classList.remove('active-o')
+        }
+
+        if (Gameboard.checkWinner(board, currentSign) || board.every(cell => cell)) {
+            activeSign.textContent = ''
+            activeSign.style.backgroundColor = 'transparent'
+        }
+    }
+
     const printSign = () => {
         boardItem.forEach(item => {
             item.addEventListener('click', () => {
@@ -114,8 +141,9 @@ const Player = () => {
                     }
                     gameResult()
                 }
-                return
 
+                _getActiveSign()
+                return
             })
         })
     }
@@ -126,12 +154,7 @@ const Player = () => {
         })
         board = new Array(9).fill(null)
         currentSign = ''
-    }
-
-    const _getWinnerDetails = () => {
-        result.textContent = `${currentSign === 'x' ? 'Player 1' : 'Player 2'} wins!`
-        winnerSign.textContent = `${currentSign === 'x' ? 'x' : 'o'}`
-        winnerSign.style.color = `${currentSign === 'x' ? 'blue' : 'green'}`
+        activeSign.textContent = 'x'
     }
 
     const gameResult = () => {
@@ -140,18 +163,22 @@ const Player = () => {
             setTimeout(() => round.showWinner(), 300)
         } else if (board.every(cell => cell)) {
             result.textContent = "It's a draw!"
+            winnerSign.textContent = ''
             round.showWinner();
         }
         return
     }
 
-    return { printSign, playAgain }
+    return { printSign, getSign, playAgain }
 }
 
 let player = Player()
 let round = Round()
 
 player.printSign()
+
+const date = new Date()
+document.getElementById('date').textContent = date.getFullYear()
 
 window.onload = () => {
     round.start()
