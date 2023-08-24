@@ -33,6 +33,7 @@ const Gameboard = (() => {
 
 const Round = () => {
 
+    let board = document.querySelector('.board')
     let startBtn = document.getElementById('start-btn')
     let startContainer = document.querySelector('.start-container')
     let restartBtn = document.getElementById('restart-btn')
@@ -48,10 +49,20 @@ const Round = () => {
     }
 
     const showWinner = () => {
-        restartContainer.style.height = 'calc(100% - 8rem)'
+
+        setTimeout(() => {
+            restartContainer.style.height = 'calc(100% - 8rem)'
+        }, 200)
+
+        board.style.opacity = '0'
         restartContainer.classList.remove('d-none')
+
         restartBtn.addEventListener('click', () => {
+            board.style.opacity = '1'
             restartContainer.style.height = '0'
+
+            player.playAgain()
+
             setTimeout(() => {
                 restartContainer.classList.add('d-none')
             }, 600)
@@ -61,14 +72,13 @@ const Round = () => {
     return { start, showWinner }
 }
 
-let round = Round()
-
 const Player = () => {
 
     let boardItem = document.querySelectorAll('.board-item')
     let result = document.getElementById('result')
+    let winnerSign = document.getElementById('winner-mark')
 
-    let board = new Array(9).fill(null);
+    let board = new Array(9).fill(null)
     let currentSign = ''
 
     let _players = {
@@ -94,6 +104,7 @@ const Player = () => {
     const printSign = () => {
         boardItem.forEach(item => {
             item.addEventListener('click', () => {
+
                 if (item.textContent === '') {
                     item.textContent = getSign(item)
                     if (currentSign === 'x') {
@@ -102,29 +113,43 @@ const Player = () => {
                         item.style.color = 'green'
                     }
                     gameResult()
-                    console.log(board)
                 }
                 return
+
             })
         })
     }
 
-    const gameResult = () => {
-        if (Gameboard.checkWinner(board, currentSign)) {
-            result.textContent = `${currentSign === 'x' ? 'Player 1' : 'Player 2'} wins!`;
-            setTimeout(() => round.showWinner(), 500)
-        } else if (board.every(cell => cell)) {
-            result.textContent = "It's a draw!";
-            round.showWinner();
-        }
-        return;
+    const playAgain = () => {
+        boardItem.forEach(item => {
+            item.textContent = null
+        })
+        board = new Array(9).fill(null)
+        currentSign = ''
     }
 
+    const _getWinnerDetails = () => {
+        result.textContent = `${currentSign === 'x' ? 'Player 1' : 'Player 2'} wins!`
+        winnerSign.textContent = `${currentSign === 'x' ? 'x' : 'o'}`
+        winnerSign.style.color = `${currentSign === 'x' ? 'blue' : 'green'}`
+    }
 
-    return { printSign, gameResult }
+    const gameResult = () => {
+        if (Gameboard.checkWinner(board, currentSign)) {
+            _getWinnerDetails()
+            setTimeout(() => round.showWinner(), 300)
+        } else if (board.every(cell => cell)) {
+            result.textContent = "It's a draw!"
+            round.showWinner();
+        }
+        return
+    }
+
+    return { printSign, playAgain }
 }
 
 let player = Player()
+let round = Round()
 
 player.printSign()
 

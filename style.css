@@ -94,11 +94,7 @@
     background-color: rgba(165, 198, 234, 0.2)
 }
 
-.player-1 {
-    padding: 0 3rem;
-}
-
-.player-2 {
+.player-1, .player-2 {
     padding: 0 3rem;
 }
 
@@ -110,4 +106,8 @@
     height: 0;
     overflow: hidden;
     transition: all 0.5s ease-in-out;
+}
+
+#winner-mark {
+    font-size: 4rem;
 }
