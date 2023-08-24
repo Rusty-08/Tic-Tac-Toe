@@ -109,16 +109,16 @@
 }
 
 #winner-mark {
-    font-size: 4rem;
+    font-size: 5rem;
 }
 
 .active-sign {
     top: 1rem;
     left: 1rem;
-    font-size: 4rem;
-    padding-bottom: 0.5rem;
-    height: 6rem;
-    width: 6rem;
+    font-size: 2.5rem;
+    padding-bottom: 0.4rem;
+    height: 4rem;
+    width: 4rem;
     color: blue;
     background-color: rgba(165, 198, 234, 0.2)
 }
@@ -161,4 +161,27 @@
 
 .owner a:hover {
     opacity: 1 !important;
+}
+
+@media screen and (max-width: 500px) {
+    
+    .container {
+        width: 90vw;
+    }
+    .board {
+        grid-template-columns: repeat(3, 5rem);
+        grid-template-rows: repeat(3, 5rem);
+    }
+    .player-1, .player-2 {
+        padding: 0 1rem;
+    }
+    .players h2 {
+        white-space: nowrap;
+    }
+    #main-body {
+        height: 100dvh !important;
+    }
+    .board-item {
+        font-size: 3rem;
+    }
 }
